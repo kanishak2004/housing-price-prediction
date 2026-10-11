@@ -1,63 +1,88 @@
 # 🏠 Housing Price Prediction using Machine Learning
 
-## 📌 Overview
+## Overview
 
-This project focuses on predicting housing prices using machine learning and regression algorithms. The aim is to build a structured workflow covering data exploration, preprocessing, model training, and evaluation.
+This project explores housing price prediction using Python and regression algorithms. It focuses on organizing a machine learning workflow into separate modules for model training, evaluation, and inference.
 
-I am developing this project to strengthen my practical understanding of machine learning and explore how a trained model can eventually be integrated into an application.
+The project is being developed as a practical exercise in machine learning, with an emphasis on reusable code, model comparison, and maintainable project structure.
 
-## 🎯 Objectives
-
-- Explore and preprocess housing data.
-- Build regression models for price prediction.
-- Compare model performance using consistent evaluation metrics.
-- Understand the process of organizing an ML project into reusable components.
-- Extend the project with an API and deployment tools as the implementation progresses.
-
-## 🛠️ Tech Stack
+## Technology Stack
 
 - **Language:** Python
 - **Data Processing:** Pandas, NumPy
 - **Machine Learning:** Scikit-learn, XGBoost
-- **Evaluation:** MAE, RMSE, R²
-- **Planned Extensions:** FastAPI, Pytest, Docker
+- **Model Evaluation:** MAE, RMSE, R²
+- **Model Persistence:** Joblib
+- **Testing:** Pytest (test files included; execution should be verified)
 
-## 🔍 Project Workflow
+## Project Structure
 
-1. Load and explore the housing dataset.
-2. Clean the data and prepare features for training.
-3. Split the dataset into training and testing sets.
-4. Train regression models such as Linear Regression, Random Forest, and XGBoost.
-5. Evaluate predictions using MAE, RMSE, and R².
-6. Compare model results and identify areas for improvement.
-7. Explore API integration, testing, and containerization.
+```text
+housing-price-prediction/
+├── src/
+│   ├── train.py
+│   ├── predict.py
+│   └── evaluate.py
+├── tests/
+│   ├── test_train.py
+│   └── test_predict.py
+├── models/
+│   └── .gitkeep
+├── requirements.txt
+├── .gitignore
+└── README.md
+```
 
-## 📊 Evaluation Metrics
+## Workflow
 
-- **MAE:** Measures the average absolute prediction error.
-- **RMSE:** Measures prediction error while penalizing larger errors more heavily.
-- **R² Score:** Measures how well the model explains variation in the target values.
+1. Load the California Housing dataset.
+2. Split the data into training and testing sets.
+3. Train Linear Regression, Random Forest, and XGBoost models.
+4. Compare model performance using MAE, RMSE, and R².
+5. Select the model with the lowest RMSE and save it for future predictions.
+6. Use the prediction module to estimate housing values from input features.
 
-Actual model results will be added after running and evaluating the implementation.
+## Evaluation Metrics
 
-## 🚀 Current Status
+- **MAE:** Average absolute difference between actual and predicted values.
+- **RMSE:** Prediction error metric that penalizes larger errors more heavily.
+- **R²:** Indicates how well the model explains variation in the target values.
 
-The repository is being set up, and the implementation is in progress. Features will be marked as completed after they have been implemented and tested.
+## Setup
 
-## 🔮 Future Improvements
+Clone the repository:
 
-- Improve data preprocessing and feature engineering.
-- Compare regression models and tune their hyperparameters.
-- Build a FastAPI endpoint for predictions.
-- Add automated tests.
-- Containerize the application using Docker.
-- Explore experiment tracking and cloud deployment.
+```bash
+git clone https://github.com/kanishak2004/housing-price-prediction.git
+cd housing-price-prediction
+```
 
-## 📚 Learning Goals
+Create and activate a virtual environment on macOS:
 
-Through this project, I aim to develop practical skills in Python, machine learning, model evaluation, and the fundamentals of production-oriented ML workflows.
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
 
-## 🙌 Acknowledgements
+Install dependencies:
 
-I use publicly available educational resources to learn about machine learning project architecture. Any third-party code or material retained in this project will be credited in accordance with its applicable license.
+```bash
+pip install -r requirements.txt
+pip install pytest
+```
 
+## Current Status
+
+The source files for training, prediction, evaluation, and testing are present in the repository. End-to-end execution and model-saving behavior still need to be verified in a Python environment.
+
+## Future Improvements
+
+- Integrate the evaluation utility directly into the training pipeline.
+- Add API-based predictions with FastAPI.
+- Expand automated tests for model training and inference.
+- Add experiment tracking and model versioning.
+- Explore containerization and deployment after local execution is verified.
+
+## Learning Goals
+
+This project helps me strengthen my understanding of regression algorithms, model evaluation, Python project organization, and the foundations of production-oriented machine learning workflows.
