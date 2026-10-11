@@ -1,53 +1,31 @@
 
-import argparse
+from pathlib import Path
+
 import joblib
 import pandas as pd
 
+ROOT = Path(__file__).resolve().parent.parent
+DEFAULT_MODEL_PATH = ROOT / "models" / "best_model.joblib"
 
-def predict_price(model_path, values):
+FEATURE_NAMES = [
+    "MedInc",
+    "HouseAge",
+    "AveRooms",
+    "AveBedrms",
+    "Population",
+    "AveOccup",
+    "Latitude",
+    "Longitude",
+]
+
+
+def predict_price(values, model_path=DEFAULT_MODEL_PATH):
+    if len(values) != len(FEATURE_NAMES):
+        raise ValueError("Exactly eight feature values are required.")
+
     model = joblib.load(model_path)
+    input_data = pd.DataFrame([values], columns=FEATURE_NAMES)
+    prediction = float(model.predict(input_data)[0])
 
-    feature_names = [
-        "MedInc",
-        "HouseAge",
-        "AveRooms",
-        "AveBedrms",
-        "Population",
-        "AveOccup",
-        "Latitude",
-        "Longitude",
-    ]
-
-    input_data = pd.DataFrame([values], columns=feature_names)
-    prediction = model.predict(input_data)[0]
-
-    # California Housing targets are measured in units of $100,000
+    # Dataset target is expressed in units of $100,000.
     return prediction * 100_000
-
-
-def main():
-    parser = argparse.ArgumentParser(
-        description="Predict a California housing value."
-    )
-    parser.add_argument(
-        "--model",
-        default="models/best_model.joblib",
-        help="Path to the saved model",
-    )
-    parser.add_argument(
-        "--values",
-        nargs=8,
-        type=float,
-        required=True,
-        metavar=("MEDINC", "HOUSEAGE", "AVEROOMS", "AVEBEDRMS",
-                 "POPULATION", "AVEOCCUP", "LATITUDE", "LONGITUDE"),
-        help="Eight input features in California Housing dataset order",
-    )
-    args = parser.parse_args()
-
-    predicted_value = predict_price(args.model, args.values)
-    print(f"Predicted housing value: ${predicted_value:,.2f}")
-
-
-if __name__ == "__main__":
-    main()
