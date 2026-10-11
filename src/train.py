@@ -4,31 +4,30 @@ from pathlib import Path
 import joblib
 import numpy as np
 import pandas as pd
-
 from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
-from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-from sklearn.pipeline import make_pipeline
 from sklearn.impute import SimpleImputer
+from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
-
+from sklearn.metrics import (
+    mean_absolute_error,
+    mean_squared_error,
+    r2_score,
+)
 from xgboost import XGBRegressor
 
-
-PROJECT_ROOT = Path(__file__).resolve().parent.parent
-MODEL_DIR = PROJECT_ROOT / "models"
+ROOT = Path(__file__).resolve().parent.parent
+MODEL_DIR = ROOT / "models"
 MODEL_PATH = MODEL_DIR / "best_model.joblib"
 
 
 def main():
-    # Load the California Housing dataset
     housing = fetch_california_housing(as_frame=True)
     X = housing.data
     y = housing.target
 
-    # Use the same split for every model
     X_train, X_test, y_train, y_test = train_test_split(
         X, y, test_size=0.2, random_state=42
     )
@@ -42,9 +41,7 @@ def main():
         "Random Forest": make_pipeline(
             SimpleImputer(strategy="median"),
             RandomForestRegressor(
-                n_estimators=100,
-                random_state=42,
-                n_jobs=-1,
+                n_estimators=100, random_state=42, n_jobs=-1
             ),
         ),
         "XGBoost": make_pipeline(
@@ -61,13 +58,12 @@ def main():
 
     results = []
     best_model = None
-    best_rmse = float("inf")
     best_name = None
+    best_rmse = float("inf")
 
     for name, model in models.items():
         model.fit(X_train, y_train)
         predictions = model.predict(X_test)
-
         rmse = float(np.sqrt(mean_squared_error(y_test, predictions)))
 
         results.append({
@@ -82,15 +78,12 @@ def main():
             best_model = model
             best_name = name
 
-    results_df = pd.DataFrame(results).sort_values("RMSE")
-    print(results_df.to_string(index=False))
-    print(f"\nBest model by RMSE: {best_name}")
+    print(pd.DataFrame(results).sort_values("RMSE").to_string(index=False))
 
-    # Save the entire pipeline, including preprocessing
     MODEL_DIR.mkdir(parents=True, exist_ok=True)
     joblib.dump(best_model, MODEL_PATH)
-
-    print(f"Saved best model to: {MODEL_PATH}")
+    print(f"\nBest model: {best_name}")
+    print(f"Saved model to: {MODEL_PATH}")
 
 
 if __name__ == "__main__":
