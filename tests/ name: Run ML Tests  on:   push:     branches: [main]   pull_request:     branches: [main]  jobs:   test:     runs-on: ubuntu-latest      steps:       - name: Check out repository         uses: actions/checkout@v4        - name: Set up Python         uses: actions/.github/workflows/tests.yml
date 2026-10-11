@@ -26,5 +26,11 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
-      - name: Run tests
+      - name: Run automated tests
         run: pytest -v
+
+      - name: Train models and save the best model
+        run: python src/train.py
+
+      - name: Verify saved model
+        run: test -f models/best_model.joblib
